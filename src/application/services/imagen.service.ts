@@ -49,4 +49,5 @@ export class ImagenService {
     await CloudinaryHelper.eliminarImagen(imagen.publicId);
     return this.imagenRepository.eliminar(id);
   }
+  
 }
