@@ -10,7 +10,7 @@ import {
 } from '../../domain/exceptions/auth.exception';
 
 export class AuthService {
-  constructor(private readonly authRepository: IAuthRepository) {}
+  constructor(private readonly authRepository: IAuthRepository) { }
 
   async login(dto: LoginDto, ipAddress: string, userAgent: string): Promise<AuthResponseDto> {
     // 1. Buscar usuario por email
@@ -51,7 +51,7 @@ export class AuthService {
         id: usuario.id,
         nombre: usuario.nombre,
         email: usuario.email,
-        rol: String(usuario.rolId),
+        rol: (usuario as any).rol?.nombre || String(usuario.rolId),
       },
     };
   }
