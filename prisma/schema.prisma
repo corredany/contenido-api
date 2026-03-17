@@ -1,0 +1,125 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Seccion {
+  id                   Int       @id @default(autoincrement())
+  nombre               String
+  descripcionPrincipal String?
+  descripcionSeccion   String?
+  esFija               Boolean   @default(false)
+  visible              Boolean   @default(true)
+  orden                Int       @default(0)
+  creadoPor            Int?
+  actualizadoPor       Int?
+  creadoEn             DateTime  @default(now())
+  actualizadoEn        DateTime  @updatedAt
+  imagenes             Imagen[]
+  videos               Video[]
+  materiales           Material[]
+}
+
+model Imagen {
+  id             Int      @id @default(autoincrement())
+  url            String
+  publicId       String
+  orden          Int      @default(0)
+  seccionId      Int?
+  seccion        Seccion? @relation(fields: [seccionId], references: [id])
+  creadoPor      Int?
+  actualizadoPor Int?
+  creadoEn       DateTime @default(now())
+  actualizadoEn  DateTime @updatedAt
+}
+
+model Video {
+  id             Int      @id @default(autoincrement())
+  url            String
+  publicId       String
+  orden          Int      @default(0)
+  seccionId      Int?
+  seccion        Seccion? @relation(fields: [seccionId], references: [id])
+  creadoPor      Int?
+  actualizadoPor Int?
+  creadoEn       DateTime @default(now())
+  actualizadoEn  DateTime @updatedAt
+}
+
+model Material {
+  id             Int      @id @default(autoincrement())
+  url            String
+  publicId       String
+  orden          Int      @default(0)
+  seccionId      Int?
+  seccion        Seccion? @relation(fields: [seccionId], references: [id])
+  creadoPor      Int?
+  actualizadoPor Int?
+  creadoEn       DateTime @default(now())
+  actualizadoEn  DateTime @updatedAt
+}
+
+model Patrocinador {
+  id             Int      @id @default(autoincrement())
+  nombre         String
+  url            String
+  publicId       String
+  orden          Int      @default(0)
+  creadoPor      Int?
+  actualizadoPor Int?
+  creadoEn       DateTime @default(now())
+  actualizadoEn  DateTime @updatedAt
+}
+
+model Usuario {
+  id             Int              @id @default(autoincrement())
+  nombre         String
+  email          String           @unique
+  contrasena     String
+  rolId          Int
+  rol            Rol              @relation(fields: [rolId], references: [id])
+  creadoPor      Int?
+  actualizadoPor Int?
+  creadoEn       DateTime         @default(now())
+  actualizadoEn  DateTime         @updatedAt
+  tokensRefresco TokenRefresco[]
+}
+
+model Rol {
+  id          Int           @id @default(autoincrement())
+  nombre      String        @unique
+  usuarios    Usuario[]
+  permisos    RolPermiso[]
+}
+
+model Permiso {
+  id      Int          @id @default(autoincrement())
+  nombre  String       @unique
+  roles   RolPermiso[]
+}
+
+model RolPermiso {
+  rolId     Int
+  permisoId Int
+  rol       Rol     @relation(fields: [rolId], references: [id])
+  permiso   Permiso @relation(fields: [permisoId], references: [id])
+
+  @@id([rolId, permisoId])
+}
+
+model TokenRefresco {
+  id          Int       @id @default(autoincrement())
+  token       String    @unique
+  usuarioId   Int
+  usuario     Usuario   @relation(fields: [usuarioId], references: [id])
+  expiraEn    DateTime
+  revocado    Boolean   @default(false)
+  revocadoEn  DateTime?
+  ipAddress   String?
+  userAgent   String?
+  creadoEn    DateTime  @default(now())
+}
