@@ -1,4 +1,5 @@
-import { Controller, Get, Post, Put, Delete, Body, Param } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param, UseGuards } from '@nestjs/common';
+import { JwtGuard } from '../../infrastructure/guards/jwt.guard';
 import { UsuarioService } from '../services/usuario.service';
 import { UsuarioRepository } from '../../infrastructure/repositories/usuario.repository';
 import type { CrearUsuarioDto, ActualizarUsuarioDto } from '../../domain/dtos/usuario.dto';
@@ -11,12 +12,12 @@ const usuarioRepository = new UsuarioRepository();
 const usuarioService = new UsuarioService(usuarioRepository);
 
 @Controller('usuarios')
+@UseGuards(JwtGuard)
 export class UsuarioController {
   @Get()
   async obtenerTodos() {
     try {
-      const usuarios = await usuarioService.obtenerTodos();
-      return usuarios;
+      return await usuarioService.obtenerTodos();
     } catch (error) {
       return { error: 'Error al obtener usuarios' };
     }
@@ -25,8 +26,7 @@ export class UsuarioController {
   @Get(':id')
   async obtenerPorId(@Param('id') id: string) {
     try {
-      const usuario = await usuarioService.obtenerPorId(Number(id));
-      return usuario;
+      return await usuarioService.obtenerPorId(Number(id));
     } catch (error) {
       if (error instanceof UsuarioNoEncontradoException) {
         return { error: error.message };
@@ -38,8 +38,7 @@ export class UsuarioController {
   @Post()
   async crear(@Body() dto: CrearUsuarioDto) {
     try {
-      const usuario = await usuarioService.crear(dto);
-      return usuario;
+      return await usuarioService.crear(dto);
     } catch (error) {
       if (error instanceof EmailDuplicadoException) {
         return { error: error.message };
@@ -51,8 +50,7 @@ export class UsuarioController {
   @Put(':id')
   async actualizar(@Param('id') id: string, @Body() dto: ActualizarUsuarioDto) {
     try {
-      const usuario = await usuarioService.actualizar(Number(id), dto);
-      return usuario;
+      return await usuarioService.actualizar(Number(id), dto);
     } catch (error) {
       if (error instanceof UsuarioNoEncontradoException) {
         return { error: error.message };

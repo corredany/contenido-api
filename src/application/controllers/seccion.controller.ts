@@ -1,4 +1,5 @@
-import { Controller, Get, Post, Put, Delete, Body, Param } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param, UseGuards } from '@nestjs/common';
+import { JwtGuard } from '../../infrastructure/guards/jwt.guard';
 import { SeccionService } from '../services/seccion.service';
 import { SeccionRepository } from '../../infrastructure/repositories/seccion.repository';
 import type { CrearSeccionDto, ActualizarSeccionDto, ActualizarOrdenDto } from '../../domain/dtos/seccion.dto';
@@ -43,6 +44,7 @@ export class SeccionController {
   }
 
   @Post()
+  @UseGuards(JwtGuard)
   async crear(@Body() dto: CrearSeccionDto) {
     try {
       return await seccionService.crear(dto);
@@ -52,6 +54,7 @@ export class SeccionController {
   }
 
   @Put('orden')
+  @UseGuards(JwtGuard)
   async actualizarOrden(@Body() secciones: ActualizarOrdenDto[]) {
     try {
       await seccionService.actualizarOrden(secciones);
@@ -62,6 +65,7 @@ export class SeccionController {
   }
 
   @Put(':id')
+  @UseGuards(JwtGuard)
   async actualizar(@Param('id') id: string, @Body() dto: ActualizarSeccionDto) {
     try {
       return await seccionService.actualizar(Number(id), dto);
@@ -74,6 +78,7 @@ export class SeccionController {
   }
 
   @Put(':id/toggle-visible')
+  @UseGuards(JwtGuard)
   async toggleVisible(@Param('id') id: string) {
     try {
       return await seccionService.toggleVisible(Number(id));
@@ -86,6 +91,7 @@ export class SeccionController {
   }
 
   @Delete(':id')
+  @UseGuards(JwtGuard)
   async eliminar(@Param('id') id: string) {
     try {
       await seccionService.eliminar(Number(id));

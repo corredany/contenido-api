@@ -8,9 +8,11 @@ import {
   Param,
   UseInterceptors,
   UploadedFile,
+  UseGuards,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { memoryStorage } from 'multer';
+import { JwtGuard } from '../../infrastructure/guards/jwt.guard';
 import { ImagenService } from '../services/imagen.service';
 import { ImagenRepository } from '../../infrastructure/repositories/imagen.repository';
 import type { ActualizarImagenDto } from '../../domain/dtos/imagen.dto';
@@ -55,6 +57,7 @@ export class ImagenController {
   }
 
   @Post()
+  @UseGuards(JwtGuard)
   @UseInterceptors(FileInterceptor('archivo', { storage: memoryStorage() }))
   async subir(
     @UploadedFile() archivo: Express.Multer.File,
@@ -75,6 +78,7 @@ export class ImagenController {
   }
 
   @Put(':id')
+  @UseGuards(JwtGuard)
   async actualizar(@Param('id') id: string, @Body() dto: ActualizarImagenDto) {
     try {
       return await imagenService.actualizar(Number(id), dto);
@@ -87,6 +91,7 @@ export class ImagenController {
   }
 
   @Delete(':id')
+  @UseGuards(JwtGuard)
   async eliminar(@Param('id') id: string) {
     try {
       await imagenService.eliminar(Number(id));

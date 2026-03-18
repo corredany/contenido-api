@@ -23,6 +23,7 @@ export class AuthController {
       const resultado = await authService.login(dto, ipAddress, userAgent);
       return res.json(resultado);
     } catch (error) {
+      console.error('Error en login:', error);
       if (error instanceof CredencialesInvalidasException) {
         return res.status(401).json({ error: error.message });
       }
