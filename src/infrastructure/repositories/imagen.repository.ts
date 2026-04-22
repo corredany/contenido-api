@@ -1,7 +1,9 @@
+import { Injectable } from '@nestjs/common';
 import { IImagenRepository } from '../../domain/interfaces/imagen.repository.interface';
 import { Imagen } from '../../domain/entities/imagen.entity';
 import { prisma } from '../database/prisma';
 
+@Injectable()
 export class ImagenRepository implements IImagenRepository {
   async encontrarTodos(): Promise<Imagen[]> {
     const imagenes = await prisma.imagen.findMany({

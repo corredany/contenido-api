@@ -76,17 +76,16 @@ model Patrocinador {
 }
 
 model Usuario {
-  id             Int              @id @default(autoincrement())
+  id             Int      @id @default(autoincrement())
   nombre         String
-  email          String           @unique
+  email          String   @unique
   contrasena     String
   rolId          Int
-  rol            Rol              @relation(fields: [rolId], references: [id])
+  rol            Rol      @relation(fields: [rolId], references: [id])
   creadoPor      Int?
   actualizadoPor Int?
-  creadoEn       DateTime         @default(now())
-  actualizadoEn  DateTime         @updatedAt
-  tokensRefresco TokenRefresco[]
+  creadoEn       DateTime @default(now())
+  actualizadoEn  DateTime @updatedAt
 }
 
 model Rol {
@@ -111,15 +110,3 @@ model RolPermiso {
   @@id([rolId, permisoId])
 }
 
-model TokenRefresco {
-  id          Int       @id @default(autoincrement())
-  token       String    @unique
-  usuarioId   Int
-  usuario     Usuario   @relation(fields: [usuarioId], references: [id])
-  expiraEn    DateTime
-  revocado    Boolean   @default(false)
-  revocadoEn  DateTime?
-  ipAddress   String?
-  userAgent   String?
-  creadoEn    DateTime  @default(now())
-}

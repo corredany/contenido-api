@@ -1,7 +1,7 @@
 import { IsInt, IsOptional } from 'class-validator';
 import { Type } from 'class-transformer';
 
-export class SubirImagenDto {
+export class SubirVideoDto {
   @IsOptional()
   @IsInt()
   @Type(() => Number)
@@ -13,7 +13,7 @@ export class SubirImagenDto {
   orden?: number;
 }
 
-export class ActualizarImagenDto {
+export class ActualizarVideoDto {
   @IsOptional()
   @IsInt()
   @Type(() => Number)

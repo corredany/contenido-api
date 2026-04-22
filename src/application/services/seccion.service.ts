@@ -1,4 +1,6 @@
-import { ISeccionRepository } from '../../domain/interfaces/seccion.repository.interface';
+import { Injectable, Inject } from '@nestjs/common';
+import type { ISeccionRepository } from '../../domain/interfaces/seccion.repository.interface';
+import { SECCION_REPOSITORY } from '../../domain/tokens';
 import { Seccion } from '../../domain/entities/seccion.entity';
 import { CrearSeccionDto, ActualizarSeccionDto, ActualizarOrdenDto } from '../../domain/dtos/seccion.dto';
 import {
@@ -6,8 +8,12 @@ import {
   SeccionFijaException,
 } from '../../domain/exceptions/seccion.exception';
 
+@Injectable()
 export class SeccionService {
-  constructor(private readonly seccionRepository: ISeccionRepository) {}
+  constructor(
+    @Inject(SECCION_REPOSITORY)
+    private readonly seccionRepository: ISeccionRepository,
+  ) {}
 
   async obtenerTodos(): Promise<Seccion[]> {
     return this.seccionRepository.encontrarTodos();
@@ -23,26 +29,31 @@ export class SeccionService {
     return seccion;
   }
 
-  async crear(dto: CrearSeccionDto): Promise<Seccion> {
+  async crear(dto: CrearSeccionDto, usuarioId: number): Promise<Seccion> {
     return this.seccionRepository.crear({
       ...dto,
       esFija: false,
       visible: true,
+      creadoPor: usuarioId,
+      actualizadoPor: usuarioId,
     });
   }
 
-  async actualizar(id: number, dto: ActualizarSeccionDto): Promise<Seccion> {
-    const seccion = await this.obtenerPorId(id);
-    return this.seccionRepository.actualizar(id, dto);
+  async actualizar(id: number, dto: ActualizarSeccionDto, usuarioId: number): Promise<Seccion> {
+    await this.obtenerPorId(id);
+    return this.seccionRepository.actualizar(id, { ...dto, actualizadoPor: usuarioId });
   }
 
   async actualizarOrden(secciones: ActualizarOrdenDto[]): Promise<void> {
     return this.seccionRepository.actualizarOrden(secciones);
   }
 
-  async toggleVisible(id: number): Promise<Seccion> {
+  async toggleVisible(id: number, usuarioId: number): Promise<Seccion> {
     const seccion = await this.obtenerPorId(id);
-    return this.seccionRepository.actualizar(id, { visible: !seccion.visible });
+    return this.seccionRepository.actualizar(id, {
+      visible: !seccion.visible,
+      actualizadoPor: usuarioId,
+    });
   }
 
   async eliminar(id: number): Promise<void> {

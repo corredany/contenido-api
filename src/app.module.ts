@@ -1,16 +1,21 @@
 import { Module } from '@nestjs/common';
-import { PassportModule } from '@nestjs/passport';
-import { AuthController } from './application/controllers/auth.controller';
-import { UsuarioController } from './application/controllers/usuario.controller';
-import { SeccionController } from './application/controllers/seccion.controller';
-import { ImagenController } from './application/controllers/imagen.controller';
-import { JwtStrategy } from './infrastructure/strategies/jwt.strategy';
+import { InfrastructureModule } from './infrastructure/infrastructure.module';
+import { UsuarioModule } from './presentation/modules/usuario.module';
+import { SeccionModule } from './presentation/modules/seccion.module';
+import { ImagenModule } from './presentation/modules/imagen.module';
+import { VideoModule } from './presentation/modules/video.module';
+import { MaterialModule } from './presentation/modules/material.module';
+import { PatrocinadorModule } from './presentation/modules/patrocinador.module';
 
 @Module({
   imports: [
-    PassportModule,
+    InfrastructureModule,
+    UsuarioModule,
+    SeccionModule,
+    ImagenModule,
+    VideoModule,
+    MaterialModule,
+    PatrocinadorModule,
   ],
-  controllers: [AuthController, UsuarioController, SeccionController, ImagenController],
-  providers: [JwtStrategy],
 })
 export class AppModule {}

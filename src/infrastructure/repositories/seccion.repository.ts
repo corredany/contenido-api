@@ -1,7 +1,9 @@
+import { Injectable } from '@nestjs/common';
 import { ISeccionRepository } from '../../domain/interfaces/seccion.repository.interface';
 import { Seccion } from '../../domain/entities/seccion.entity';
 import { prisma } from '../database/prisma';
 
+@Injectable()
 export class SeccionRepository implements ISeccionRepository {
   async encontrarTodos(): Promise<Seccion[]> {
     const secciones = await prisma.seccion.findMany({

@@ -1,7 +1,9 @@
+import { Injectable } from '@nestjs/common';
 import { IUsuarioRepository } from '../../domain/interfaces/usuario.repository.interface';
 import { Usuario } from '../../domain/entities/usuario.entity';
 import { prisma } from '../database/prisma';
 
+@Injectable()
 export class UsuarioRepository implements IUsuarioRepository {
   async encontrarTodos(): Promise<Usuario[]> {
     const usuarios = await prisma.usuario.findMany({

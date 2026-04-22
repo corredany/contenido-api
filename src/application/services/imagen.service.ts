@@ -1,11 +1,17 @@
-import { IImagenRepository } from '../../domain/interfaces/imagen.repository.interface';
+import { Injectable, Inject } from '@nestjs/common';
+import type { IImagenRepository } from '../../domain/interfaces/imagen.repository.interface';
+import { IMAGEN_REPOSITORY } from '../../domain/tokens';
 import { Imagen } from '../../domain/entities/imagen.entity';
 import { CloudinaryHelper } from '../../infrastructure/helpers/cloudinary.helper';
 import { ActualizarImagenDto } from '../../domain/dtos/imagen.dto';
 import { ImagenNoEncontradaException, ErrorSubidaImagenException } from '../../domain/exceptions/imagen.exception';
 
+@Injectable()
 export class ImagenService {
-  constructor(private readonly imagenRepository: IImagenRepository) {}
+  constructor(
+    @Inject(IMAGEN_REPOSITORY)
+    private readonly imagenRepository: IImagenRepository,
+  ) {}
 
   async obtenerTodos(): Promise<Imagen[]> {
     return this.imagenRepository.encontrarTodos();
@@ -23,6 +29,7 @@ export class ImagenService {
 
   async subir(
     archivo: Express.Multer.File,
+    usuarioId: number,
     seccionId?: number,
     orden?: number,
   ): Promise<Imagen> {
@@ -33,15 +40,17 @@ export class ImagenService {
         publicId,
         seccionId: seccionId || null,
         orden: orden || 0,
+        creadoPor: usuarioId,
+        actualizadoPor: usuarioId,
       });
     } catch {
       throw new ErrorSubidaImagenException();
     }
   }
 
-  async actualizar(id: number, dto: ActualizarImagenDto): Promise<Imagen> {
+  async actualizar(id: number, dto: ActualizarImagenDto, usuarioId: number): Promise<Imagen> {
     await this.obtenerPorId(id);
-    return this.imagenRepository.actualizar(id, dto);
+    return this.imagenRepository.actualizar(id, { ...dto, actualizadoPor: usuarioId });
   }
 
   async eliminar(id: number): Promise<void> {
@@ -49,5 +58,4 @@ export class ImagenService {
     await CloudinaryHelper.eliminarImagen(imagen.publicId);
     return this.imagenRepository.eliminar(id);
   }
-  
 }
