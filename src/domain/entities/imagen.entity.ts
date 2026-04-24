@@ -1,7 +1,7 @@
 export class Imagen {
   id: number;
   url: string;
-  publicId: string;
+  rutaArchivo: string;
   orden: number;
   seccionId: number | null;
   creadoPor: number | null;

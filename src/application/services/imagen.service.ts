@@ -2,7 +2,7 @@ import { Injectable, Inject } from '@nestjs/common';
 import type { IImagenRepository } from '../../domain/interfaces/imagen.repository.interface';
 import { IMAGEN_REPOSITORY } from '../../domain/tokens';
 import { Imagen } from '../../domain/entities/imagen.entity';
-import { CloudinaryHelper } from '../../infrastructure/helpers/cloudinary.helper';
+import { LocalStorageHelper } from '../../infrastructure/helpers/local-storage.helper';
 import { ActualizarImagenDto } from '../../domain/dtos/imagen.dto';
 import { ImagenNoEncontradaException, ErrorSubidaImagenException } from '../../domain/exceptions/imagen.exception';
 
@@ -34,10 +34,10 @@ export class ImagenService {
     orden?: number,
   ): Promise<Imagen> {
     try {
-      const { url, publicId } = await CloudinaryHelper.subirImagen(archivo);
+      const { url, rutaArchivo } = await LocalStorageHelper.guardar(archivo, 'imagenes');
       return this.imagenRepository.crear({
         url,
-        publicId,
+        rutaArchivo,
         seccionId: seccionId || null,
         orden: orden || 0,
         creadoPor: usuarioId,
@@ -55,7 +55,7 @@ export class ImagenService {
 
   async eliminar(id: number): Promise<void> {
     const imagen = await this.obtenerPorId(id);
-    await CloudinaryHelper.eliminarImagen(imagen.publicId);
+    await LocalStorageHelper.eliminar(imagen.rutaArchivo);
     return this.imagenRepository.eliminar(id);
   }
 }

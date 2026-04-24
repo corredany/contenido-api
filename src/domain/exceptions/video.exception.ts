@@ -7,7 +7,7 @@ export class VideoNoEncontradoException extends Error {
 
 export class ErrorSubidaVideoException extends Error {
   constructor() {
-    super('Error al subir el video a Cloudinary');
+    super('Error al guardar el video en el servidor');
     this.name = 'ErrorSubidaVideoException';
   }
 }

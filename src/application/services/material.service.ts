@@ -2,7 +2,7 @@ import { Injectable, Inject } from '@nestjs/common';
 import type { IMaterialRepository } from '../../domain/interfaces/material.repository.interface';
 import { MATERIAL_REPOSITORY } from '../../domain/tokens';
 import { Material } from '../../domain/entities/material.entity';
-import { CloudinaryHelper } from '../../infrastructure/helpers/cloudinary.helper';
+import { LocalStorageHelper } from '../../infrastructure/helpers/local-storage.helper';
 import { ActualizarMaterialDto } from '../../domain/dtos/material.dto';
 import { MaterialNoEncontradoException, ErrorSubidaMaterialException } from '../../domain/exceptions/material.exception';
 
@@ -30,14 +30,18 @@ export class MaterialService {
   async subir(
     archivo: Express.Multer.File,
     usuarioId: number,
+    nombre: string,
+    descripcion?: string,
     seccionId?: number,
     orden?: number,
   ): Promise<Material> {
     try {
-      const { url, publicId } = await CloudinaryHelper.subirImagen(archivo, 'materiales');
+      const { url, rutaArchivo } = await LocalStorageHelper.guardar(archivo, 'materiales');
       return this.materialRepository.crear({
+        nombre,
+        descripcion: descripcion || null,
         url,
-        publicId,
+        rutaArchivo,
         seccionId: seccionId || null,
         orden: orden || 0,
         creadoPor: usuarioId,
@@ -55,7 +59,7 @@ export class MaterialService {
 
   async eliminar(id: number): Promise<void> {
     const material = await this.obtenerPorId(id);
-    await CloudinaryHelper.eliminarImagen(material.publicId);
+    await LocalStorageHelper.eliminar(material.rutaArchivo);
     return this.materialRepository.eliminar(id);
   }
 }

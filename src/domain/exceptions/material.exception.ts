@@ -7,7 +7,7 @@ export class MaterialNoEncontradoException extends Error {
 
 export class ErrorSubidaMaterialException extends Error {
   constructor() {
-    super('Error al subir el material a Cloudinary');
+    super('Error al guardar el material en el servidor');
     this.name = 'ErrorSubidaMaterialException';
   }
 }

@@ -2,7 +2,7 @@ import { Injectable, Inject } from '@nestjs/common';
 import type { IVideoRepository } from '../../domain/interfaces/video.repository.interface';
 import { VIDEO_REPOSITORY } from '../../domain/tokens';
 import { Video } from '../../domain/entities/video.entity';
-import { CloudinaryHelper } from '../../infrastructure/helpers/cloudinary.helper';
+import { LocalStorageHelper } from '../../infrastructure/helpers/local-storage.helper';
 import { ActualizarVideoDto } from '../../domain/dtos/video.dto';
 import { VideoNoEncontradoException, ErrorSubidaVideoException } from '../../domain/exceptions/video.exception';
 
@@ -34,10 +34,10 @@ export class VideoService {
     orden?: number,
   ): Promise<Video> {
     try {
-      const { url, publicId } = await CloudinaryHelper.subirImagen(archivo, 'videos');
+      const { url, rutaArchivo } = await LocalStorageHelper.guardar(archivo, 'videos');
       return this.videoRepository.crear({
         url,
-        publicId,
+        rutaArchivo,
         seccionId: seccionId || null,
         orden: orden || 0,
         creadoPor: usuarioId,
@@ -55,7 +55,7 @@ export class VideoService {
 
   async eliminar(id: number): Promise<void> {
     const video = await this.obtenerPorId(id);
-    await CloudinaryHelper.eliminarImagen(video.publicId);
+    await LocalStorageHelper.eliminar(video.rutaArchivo);
     return this.videoRepository.eliminar(id);
   }
 }

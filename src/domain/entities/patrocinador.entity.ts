@@ -2,7 +2,7 @@ export class Patrocinador {
   id!: number;
   nombre!: string;
   url!: string;
-  publicId!: string;
+  rutaArchivo!: string;
   orden!: number;
   creadoPor!: number | null;
   actualizadoPor!: number | null;

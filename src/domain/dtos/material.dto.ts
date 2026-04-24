@@ -1,7 +1,14 @@
-import { IsInt, IsOptional } from 'class-validator';
+import { IsInt, IsOptional, IsString } from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class SubirMaterialDto {
+  @IsString()
+  nombre!: string;
+
+  @IsOptional()
+  @IsString()
+  descripcion?: string;
+
   @IsOptional()
   @IsInt()
   @Type(() => Number)
@@ -14,6 +21,14 @@ export class SubirMaterialDto {
 }
 
 export class ActualizarMaterialDto {
+  @IsOptional()
+  @IsString()
+  nombre?: string;
+
+  @IsOptional()
+  @IsString()
+  descripcion?: string | null;
+
   @IsOptional()
   @IsInt()
   @Type(() => Number)

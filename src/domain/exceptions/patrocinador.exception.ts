@@ -7,7 +7,7 @@ export class PatrocinadorNoEncontradoException extends Error {
 
 export class ErrorSubidaPatrocinadorException extends Error {
   constructor() {
-    super('Error al subir la imagen del patrocinador a Cloudinary');
+    super('Error al guardar el logo del patrocinador en el servidor');
     this.name = 'ErrorSubidaPatrocinadorException';
   }
 }

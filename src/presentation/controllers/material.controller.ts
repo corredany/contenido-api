@@ -34,12 +34,14 @@ export class MaterialController {
   @UseInterceptors(FileInterceptor('archivo', { storage: memoryStorage() }))
   subir(
     @UploadedFile() archivo: Express.Multer.File,
-    @Body() body: { seccionId?: string; orden?: string },
+    @Body() body: { nombre?: string; descripcion?: string; seccionId?: string; orden?: string },
     @GetUser() usuario: UsuarioAutenticado,
   ) {
     return this.materialService.subir(
       archivo,
       usuario.id,
+      body.nombre ?? '',
+      body.descripcion,
       body.seccionId ? Number(body.seccionId) : undefined,
       body.orden ? Number(body.orden) : undefined,
     );

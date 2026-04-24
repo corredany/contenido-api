@@ -1,7 +1,9 @@
 export class Material {
   id!: number;
+  nombre!: string;
+  descripcion!: string | null;
   url!: string;
-  publicId!: string;
+  rutaArchivo!: string;
   orden!: number;
   seccionId!: number | null;
   creadoPor!: number | null;

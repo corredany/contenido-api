@@ -2,7 +2,7 @@ import { Injectable, Inject } from '@nestjs/common';
 import type { IPatrocinadorRepository } from '../../domain/interfaces/patrocinador.repository.interface';
 import { PATROCINADOR_REPOSITORY } from '../../domain/tokens';
 import { Patrocinador } from '../../domain/entities/patrocinador.entity';
-import { CloudinaryHelper } from '../../infrastructure/helpers/cloudinary.helper';
+import { LocalStorageHelper } from '../../infrastructure/helpers/local-storage.helper';
 import { CrearPatrocinadorDto, ActualizarPatrocinadorDto } from '../../domain/dtos/patrocinador.dto';
 import { PatrocinadorNoEncontradoException, ErrorSubidaPatrocinadorException } from '../../domain/exceptions/patrocinador.exception';
 
@@ -29,11 +29,11 @@ export class PatrocinadorService {
     usuarioId: number,
   ): Promise<Patrocinador> {
     try {
-      const { url, publicId } = await CloudinaryHelper.subirImagen(archivo, 'patrocinadores');
+      const { url, rutaArchivo } = await LocalStorageHelper.guardar(archivo, 'patrocinadores');
       return this.patrocinadorRepository.crear({
         nombre: dto.nombre,
         url,
-        publicId,
+        rutaArchivo,
         orden: dto.orden || 0,
         creadoPor: usuarioId,
         actualizadoPor: usuarioId,
@@ -50,7 +50,7 @@ export class PatrocinadorService {
 
   async eliminar(id: number): Promise<void> {
     const patrocinador = await this.obtenerPorId(id);
-    await CloudinaryHelper.eliminarImagen(patrocinador.publicId);
+    await LocalStorageHelper.eliminar(patrocinador.rutaArchivo);
     return this.patrocinadorRepository.eliminar(id);
   }
 }

@@ -26,8 +26,8 @@ model Seccion {
 
 model Imagen {
   id             Int      @id @default(autoincrement())
-  url            String
-  publicId       String
+  url            String   @unique
+  rutaArchivo    String
   orden          Int      @default(0)
   seccionId      Int?
   seccion        Seccion? @relation(fields: [seccionId], references: [id])
@@ -40,7 +40,7 @@ model Imagen {
 model Video {
   id             Int      @id @default(autoincrement())
   url            String
-  publicId       String
+  rutaArchivo       String
   orden          Int      @default(0)
   seccionId      Int?
   seccion        Seccion? @relation(fields: [seccionId], references: [id])
@@ -52,8 +52,10 @@ model Video {
 
 model Material {
   id             Int      @id @default(autoincrement())
+  nombre         String   @default("")
+  descripcion    String?
   url            String
-  publicId       String
+  rutaArchivo    String
   orden          Int      @default(0)
   seccionId      Int?
   seccion        Seccion? @relation(fields: [seccionId], references: [id])
@@ -65,9 +67,9 @@ model Material {
 
 model Patrocinador {
   id             Int      @id @default(autoincrement())
-  nombre         String
+  nombre         String   @unique
   url            String
-  publicId       String
+  rutaArchivo    String
   orden          Int      @default(0)
   creadoPor      Int?
   actualizadoPor Int?
