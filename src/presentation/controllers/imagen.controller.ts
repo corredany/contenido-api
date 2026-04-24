@@ -8,7 +8,7 @@ import { JwtGuard } from '../../infrastructure/guards/jwt.guard';
 import { ImagenService } from '../../application/services/imagen.service';
 import { GetUser } from '../decorators/get-user.decorator';
 import type { UsuarioAutenticado } from '../decorators/get-user.decorator';
-import type { ActualizarImagenDto } from '../../domain/dtos/imagen.dto';
+import { ActualizarImagenDto } from '../../domain/dtos/imagen.dto';
 
 @Controller('imagenes')
 export class ImagenController {

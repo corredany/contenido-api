@@ -8,7 +8,7 @@ import { JwtGuard } from '../../infrastructure/guards/jwt.guard';
 import { VideoService } from '../../application/services/video.service';
 import { GetUser } from '../decorators/get-user.decorator';
 import type { UsuarioAutenticado } from '../decorators/get-user.decorator';
-import type { ActualizarVideoDto } from '../../domain/dtos/video.dto';
+import { ActualizarVideoDto } from '../../domain/dtos/video.dto';
 
 @Controller('videos')
 export class VideoController {

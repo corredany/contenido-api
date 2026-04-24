@@ -1,4 +1,4 @@
-import { ExceptionFilter, Catch, ArgumentsHost, HttpStatus } from '@nestjs/common';
+import { ExceptionFilter, Catch, ArgumentsHost, HttpStatus, HttpException } from '@nestjs/common';
 import type { Response } from 'express';
 import { UsuarioNoEncontradoException, EmailDuplicadoException } from '../../domain/exceptions/usuario.exception';
 import { SeccionNoEncontradaException, SeccionFijaException } from '../../domain/exceptions/seccion.exception';
@@ -27,6 +27,10 @@ export class DomainExceptionFilter implements ExceptionFilter {
   catch(exception: Error, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
+
+    if (exception instanceof HttpException) {
+      return response.status(exception.getStatus()).json(exception.getResponse());
+    }
 
     for (const [ExceptionClass, status] of STATUS_MAP) {
       if (exception instanceof ExceptionClass) {

@@ -8,7 +8,7 @@ import { JwtGuard } from '../../infrastructure/guards/jwt.guard';
 import { MaterialService } from '../../application/services/material.service';
 import { GetUser } from '../decorators/get-user.decorator';
 import type { UsuarioAutenticado } from '../decorators/get-user.decorator';
-import type { ActualizarMaterialDto } from '../../domain/dtos/material.dto';
+import { ActualizarMaterialDto } from '../../domain/dtos/material.dto';
 
 @Controller('materiales')
 export class MaterialController {

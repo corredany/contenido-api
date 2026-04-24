@@ -8,7 +8,7 @@ import { JwtGuard } from '../../infrastructure/guards/jwt.guard';
 import { PatrocinadorService } from '../../application/services/patrocinador.service';
 import { GetUser } from '../decorators/get-user.decorator';
 import type { UsuarioAutenticado } from '../decorators/get-user.decorator';
-import type { CrearPatrocinadorDto, ActualizarPatrocinadorDto } from '../../domain/dtos/patrocinador.dto';
+import { CrearPatrocinadorDto, ActualizarPatrocinadorDto } from '../../domain/dtos/patrocinador.dto';
 
 @Controller('patrocinadores')
 export class PatrocinadorController {

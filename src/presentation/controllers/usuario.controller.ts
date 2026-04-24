@@ -3,7 +3,7 @@ import { JwtGuard } from '../../infrastructure/guards/jwt.guard';
 import { UsuarioService } from '../../application/services/usuario.service';
 import { GetUser } from '../decorators/get-user.decorator';
 import type { UsuarioAutenticado } from '../decorators/get-user.decorator';
-import type { CrearUsuarioDto, ActualizarUsuarioDto } from '../../domain/dtos/usuario.dto';
+import { CrearUsuarioDto, ActualizarUsuarioDto } from '../../domain/dtos/usuario.dto';
 
 @Controller('usuarios')
 @UseGuards(JwtGuard)
