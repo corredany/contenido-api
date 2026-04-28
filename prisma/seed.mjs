@@ -9,6 +9,18 @@ const rol = await prisma.rol.upsert({
   create: { nombre: 'admin' },
 });
 
+await prisma.rol.upsert({
+  where: { nombre: 'editor' },
+  update: {},
+  create: { nombre: 'editor' },
+});
+
+await prisma.rol.upsert({
+  where: { nombre: 'recepcionista' },
+  update: {},
+  create: { nombre: 'recepcionista' },
+});
+
 const hash = await bcrypt.hash('admin123', 10);
 
 await prisma.usuario.upsert({

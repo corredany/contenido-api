@@ -6,6 +6,7 @@ import { ImagenModule } from './presentation/modules/imagen.module';
 import { VideoModule } from './presentation/modules/video.module';
 import { MaterialModule } from './presentation/modules/material.module';
 import { PatrocinadorModule } from './presentation/modules/patrocinador.module';
+import { RolModule } from './presentation/modules/rol.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { PatrocinadorModule } from './presentation/modules/patrocinador.module';
     VideoModule,
     MaterialModule,
     PatrocinadorModule,
+    RolModule,
   ],
 })
 export class AppModule {}
