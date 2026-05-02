@@ -5,6 +5,8 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { memoryStorage } from 'multer';
 import { JwtGuard } from '../../infrastructure/guards/jwt.guard';
+import { PermisosGuard } from '../../infrastructure/guards/permisos.guard';
+import { RequierePermiso } from '../decorators/requiere-permiso.decorator';
 import { ImagenService } from '../../application/services/imagen.service';
 import { GetUser } from '../decorators/get-user.decorator';
 import type { UsuarioAutenticado } from '../decorators/get-user.decorator';
@@ -30,7 +32,8 @@ export class ImagenController {
   }
 
   @Post()
-  @UseGuards(JwtGuard)
+  @UseGuards(JwtGuard, PermisosGuard)
+  @RequierePermiso('contenido:gestionar')
   @UseInterceptors(FileInterceptor('archivo', { storage: memoryStorage() }))
   subir(
     @UploadedFile() archivo: Express.Multer.File,
@@ -46,7 +49,8 @@ export class ImagenController {
   }
 
   @Put(':id')
-  @UseGuards(JwtGuard)
+  @UseGuards(JwtGuard, PermisosGuard)
+  @RequierePermiso('contenido:gestionar')
   actualizar(
     @Param('id') id: string,
     @Body() dto: ActualizarImagenDto,
@@ -56,7 +60,8 @@ export class ImagenController {
   }
 
   @Delete(':id')
-  @UseGuards(JwtGuard)
+  @UseGuards(JwtGuard, PermisosGuard)
+  @RequierePermiso('contenido:gestionar')
   async eliminar(@Param('id') id: string) {
     await this.imagenService.eliminar(Number(id));
     return { mensaje: 'Imagen eliminada correctamente' };

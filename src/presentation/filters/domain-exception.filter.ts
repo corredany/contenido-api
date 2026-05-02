@@ -1,6 +1,5 @@
 import { ExceptionFilter, Catch, ArgumentsHost, HttpStatus, HttpException } from '@nestjs/common';
 import type { Response } from 'express';
-import { UsuarioNoEncontradoException, EmailDuplicadoException } from '../../domain/exceptions/usuario.exception';
 import { SeccionNoEncontradaException, SeccionFijaException } from '../../domain/exceptions/seccion.exception';
 import { ImagenNoEncontradaException, ErrorSubidaImagenException } from '../../domain/exceptions/imagen.exception';
 import { VideoNoEncontradoException, ErrorSubidaVideoException } from '../../domain/exceptions/video.exception';
@@ -8,8 +7,6 @@ import { MaterialNoEncontradoException, ErrorSubidaMaterialException } from '../
 import { PatrocinadorNoEncontradoException, ErrorSubidaPatrocinadorException } from '../../domain/exceptions/patrocinador.exception';
 
 const STATUS_MAP = new Map<new (...args: any[]) => Error, HttpStatus>([
-  [UsuarioNoEncontradoException, HttpStatus.NOT_FOUND],
-  [EmailDuplicadoException, HttpStatus.CONFLICT],
   [SeccionNoEncontradaException, HttpStatus.NOT_FOUND],
   [SeccionFijaException, HttpStatus.UNPROCESSABLE_ENTITY],
   [ImagenNoEncontradaException, HttpStatus.NOT_FOUND],

@@ -1,5 +1,7 @@
 import { Controller, Get, Post, Put, Delete, Body, Param, UseGuards } from '@nestjs/common';
 import { JwtGuard } from '../../infrastructure/guards/jwt.guard';
+import { PermisosGuard } from '../../infrastructure/guards/permisos.guard';
+import { RequierePermiso } from '../decorators/requiere-permiso.decorator';
 import { SeccionService } from '../../application/services/seccion.service';
 import { GetUser } from '../decorators/get-user.decorator';
 import type { UsuarioAutenticado } from '../decorators/get-user.decorator';
@@ -25,20 +27,23 @@ export class SeccionController {
   }
 
   @Post()
-  @UseGuards(JwtGuard)
+  @UseGuards(JwtGuard, PermisosGuard)
+  @RequierePermiso('contenido:gestionar')
   crear(@Body() dto: CrearSeccionDto, @GetUser() usuario: UsuarioAutenticado) {
     return this.seccionService.crear(dto, usuario.id);
   }
 
   @Put('orden')
-  @UseGuards(JwtGuard)
+  @UseGuards(JwtGuard, PermisosGuard)
+  @RequierePermiso('contenido:gestionar')
   async actualizarOrden(@Body() secciones: ActualizarOrdenDto[]) {
     await this.seccionService.actualizarOrden(secciones);
     return { mensaje: 'Orden actualizado correctamente' };
   }
 
   @Put(':id')
-  @UseGuards(JwtGuard)
+  @UseGuards(JwtGuard, PermisosGuard)
+  @RequierePermiso('contenido:gestionar')
   actualizar(
     @Param('id') id: string,
     @Body() dto: ActualizarSeccionDto,
@@ -48,13 +53,15 @@ export class SeccionController {
   }
 
   @Put(':id/toggle-visible')
-  @UseGuards(JwtGuard)
+  @UseGuards(JwtGuard, PermisosGuard)
+  @RequierePermiso('contenido:gestionar')
   toggleVisible(@Param('id') id: string, @GetUser() usuario: UsuarioAutenticado) {
     return this.seccionService.toggleVisible(Number(id), usuario.id);
   }
 
   @Delete(':id')
-  @UseGuards(JwtGuard)
+  @UseGuards(JwtGuard, PermisosGuard)
+  @RequierePermiso('contenido:gestionar')
   async eliminar(@Param('id') id: string) {
     await this.seccionService.eliminar(Number(id));
     return { mensaje: 'Sección eliminada correctamente' };

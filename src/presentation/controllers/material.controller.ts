@@ -5,6 +5,8 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { memoryStorage } from 'multer';
 import { JwtGuard } from '../../infrastructure/guards/jwt.guard';
+import { PermisosGuard } from '../../infrastructure/guards/permisos.guard';
+import { RequierePermiso } from '../decorators/requiere-permiso.decorator';
 import { MaterialService } from '../../application/services/material.service';
 import { GetUser } from '../decorators/get-user.decorator';
 import type { UsuarioAutenticado } from '../decorators/get-user.decorator';
@@ -30,7 +32,8 @@ export class MaterialController {
   }
 
   @Post()
-  @UseGuards(JwtGuard)
+  @UseGuards(JwtGuard, PermisosGuard)
+  @RequierePermiso('contenido:gestionar')
   @UseInterceptors(FileInterceptor('archivo', { storage: memoryStorage() }))
   subir(
     @UploadedFile() archivo: Express.Multer.File,
@@ -48,7 +51,8 @@ export class MaterialController {
   }
 
   @Put(':id')
-  @UseGuards(JwtGuard)
+  @UseGuards(JwtGuard, PermisosGuard)
+  @RequierePermiso('contenido:gestionar')
   actualizar(
     @Param('id') id: string,
     @Body() dto: ActualizarMaterialDto,
@@ -58,7 +62,8 @@ export class MaterialController {
   }
 
   @Delete(':id')
-  @UseGuards(JwtGuard)
+  @UseGuards(JwtGuard, PermisosGuard)
+  @RequierePermiso('contenido:gestionar')
   async eliminar(@Param('id') id: string) {
     await this.materialService.eliminar(Number(id));
     return { mensaje: 'Material eliminado correctamente' };

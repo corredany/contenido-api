@@ -1,4 +1,3 @@
-export const USUARIO_REPOSITORY = 'IUsuarioRepository';
 export const SECCION_REPOSITORY = 'ISeccionRepository';
 export const IMAGEN_REPOSITORY = 'IImagenRepository';
 export const VIDEO_REPOSITORY = 'IVideoRepository';

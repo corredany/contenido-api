@@ -76,39 +76,3 @@ model Patrocinador {
   creadoEn       DateTime @default(now())
   actualizadoEn  DateTime @updatedAt
 }
-
-model Usuario {
-  id             Int      @id @default(autoincrement())
-  nombre         String
-  email          String   @unique
-  contrasena     String
-  rolId          Int
-  rol            Rol      @relation(fields: [rolId], references: [id])
-  creadoPor      Int?
-  actualizadoPor Int?
-  creadoEn       DateTime @default(now())
-  actualizadoEn  DateTime @updatedAt
-}
-
-model Rol {
-  id          Int           @id @default(autoincrement())
-  nombre      String        @unique
-  usuarios    Usuario[]
-  permisos    RolPermiso[]
-}
-
-model Permiso {
-  id      Int          @id @default(autoincrement())
-  nombre  String       @unique
-  roles   RolPermiso[]
-}
-
-model RolPermiso {
-  rolId     Int
-  permisoId Int
-  rol       Rol     @relation(fields: [rolId], references: [id])
-  permiso   Permiso @relation(fields: [permisoId], references: [id])
-
-  @@id([rolId, permisoId])
-}
-
